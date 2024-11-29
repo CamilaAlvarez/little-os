@@ -43,6 +43,11 @@ void fb_write_cell(unsigned int i, char c, unsigned char fg, unsigned char bg);
  */
 void fb_move_cursor(unsigned short pos);
 
+/** fb_get_cursor:
+ * Get the cursor's current position
+ */
+unsigned short fb_get_cursor();
+
 /** write:
  * Writes buffer into the framebuffer
  *

@@ -1,4 +1,5 @@
 global outb
+global inb
 
 ; outb - send a byte to an I/O port
 ; stack: [esp + 8] the data byte
@@ -9,3 +10,7 @@ outb:
 	mov dx, [esp + 4]
 	out dx, al
 	ret 
+inb:
+	mov dx, [esp + 4]
+	in al, dx
+	ret

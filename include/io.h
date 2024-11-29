@@ -7,5 +7,10 @@
  * @param data The data to send to the I/O port
  */
 void outb(unsigned short port, unsigned char data);
-
+/** inb:
+ * Returns value from the given I/O port.
+ *
+ * @param port The I/O port to read
+ */ 
+unsigned short inb(unsigned short port);
 #endif
