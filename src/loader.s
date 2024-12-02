@@ -1,6 +1,6 @@
 global loader
 
-extern write ; the function is defined somewhere else
+extern main ; the function is defined somewhere else
 
 MAGIC_NUMBER equ 0x1BADB002
 FLAGS        equ 0x0
@@ -14,16 +14,10 @@ align 4
 	dd CHECKSUM
 
 loader:
-	mov eax, 0xCAFEBABE
 	mov esp, kernel_stack + KERNEL_STACK_SIZE ; end of the memory area = start of the stack
-	lea eax, str	
-	push dword 0x0B
-	push eax
-	call write
+	call main
 .loop:
 	jmp .loop
-section .data
-	str: db "Hello world",0
 section .bss
 align 4
 kernel_stack:

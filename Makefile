@@ -1,18 +1,20 @@
-OBJECTS = loader.o kmain.o io.o
+DEST := build
+OBJECTS := $(DEST)/loader.o $(DEST)/kmain.o $(DEST)/io.o $(DEST)/framebuffer.o 
 CC = x86_64-linux-gnu-gcc
 CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
 	 -nostartfiles -nodefaultlibs -Wall -Werror -c
-LDFLAGS = -T link.ld -melf_i386
+LDFLAGS = -T image/link.ld -melf_i386
 AS = nasm
 ASFLAGS = -f elf
+SRC := src
 
-all: kernel.elf
+all: $(DEST)/kernel.elf
 
-kernel.elf: $(OBJECTS)
-	x86_64-linux-gnu-ld $(LDFLAGS) $(OBJECTS) -o kernel.elf
+$(DEST)/kernel.elf: $(OBJECTS)
+	x86_64-linux-gnu-ld $(LDFLAGS) $(OBJECTS) -o $(DEST)/kernel.elf
 
-os.iso: kernel.elf
-	cp kernel.elf iso/boot/kernel.elf
+os.iso: $(DEST)/kernel.elf
+	cp $(DEST)/kernel.elf image/iso/boot/kernel.elf
 	genisoimage -R \
 		-b boot/grub/stage2_eltorito \
 		-no-emul-boot \
@@ -22,17 +24,19 @@ os.iso: kernel.elf
 		-quiet \
 		-boot-info-table \
 		-o os.iso \
-		iso
+		image/iso
 
 run: os.iso
 	bochs -f bochsrc.txt -q
 
-%.o: %.c
+$(DEST)/%.o: $(SRC)/%.c
+	mkdir -p $(@D)
 	$(CC) $(CFLAGS) -I include/ $< -o $@
 
-%.o: %.s
+$(DEST)/%.o: $(SRC)/%.s
+	mkdir -p $(@D)
 	$(AS) $(ASFLAGS) $< -o $@
 
 clean:
-	rm -rf *.o kernel.elf os.iso	
+	rm -rf build/ os.iso image/iso/boot/kernel.elf	
 		

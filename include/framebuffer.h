@@ -48,11 +48,11 @@ void fb_move_cursor(unsigned short pos);
  */
 unsigned short fb_get_cursor();
 
-/** write:
+/** fb_write:
  * Writes buffer into the framebuffer
  *
  * @param buf Buffer to write to the framebuffer
  * @param len Number of characters to write
  */
-int write(char *buf, unsigned int len); 
+int fb_write(char *buf, unsigned int len); 
 #endif
