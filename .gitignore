@@ -54,3 +54,4 @@ dkms.conf
 # Specific to our project
 os.iso
 bochslog.txt
+com.out

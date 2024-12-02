@@ -1,5 +1,5 @@
 DEST := build
-OBJECTS := $(DEST)/loader.o $(DEST)/kmain.o $(DEST)/io.o $(DEST)/framebuffer.o 
+OBJECTS := $(DEST)/loader.o $(DEST)/kmain.o $(DEST)/io.o $(DEST)/framebuffer.o $(DEST)/serial_port.o
 CC = x86_64-linux-gnu-gcc
 CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
 	 -nostartfiles -nodefaultlibs -Wall -Werror -c
