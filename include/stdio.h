@@ -1,8 +1,15 @@
 #ifndef INCLUDE_STDIO_H
 #define INCLUDE_STDIO_H
 
+/* Available devices */
 #define FRAMEBUFFER 0
 #define SERIAL_PORT 1
+
+/* Severity of the logs */
+#define LOG_DEFAULT ""
+#define LOG_DEBUG   "[DEBUG] "
+#define LOG_INFO    "[INFO] "
+#define LOG_ERROR   "[ERROR] "
 
 /** strlen:
  * Computes the length of a string.

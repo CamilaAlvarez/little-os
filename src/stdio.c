@@ -8,10 +8,10 @@ static void write(unsigned char device, char *c, unsigned int len)
 	switch (device)
 	{
 		case FRAMEBUFFER:
-			fb_write(c, len);
+			fb_write(LOG_DEFAULT, c, len);
 			break;
 		case SERIAL_PORT:
-			serial_write(c, len);
+			serial_write(LOG_DEFAULT, c, len);
 			break;
 		default:
 			break;	

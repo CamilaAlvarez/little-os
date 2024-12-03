@@ -54,5 +54,5 @@ unsigned short fb_get_cursor();
  * @param buf Buffer to write to the framebuffer
  * @param len Number of characters to write
  */
-int fb_write(char *buf, unsigned int len); 
+int fb_write(const char * const severity, char *buf, unsigned int len); 
 #endif

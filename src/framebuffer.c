@@ -1,5 +1,6 @@
 #include "framebuffer.h"
 #include "io.h"
+#include "stdio.h"
 
 static unsigned char *fb = (unsigned char *)0x000B8000;
 void fb_write_cell(unsigned int i, char c, unsigned char fg, unsigned char bg)
@@ -25,9 +26,20 @@ unsigned short fb_get_cursor()
         return position;
 
 }
-int fb_write(char *buf, unsigned int len)
+int fb_write(const char * const severity, char *buf, unsigned int len)
 {
         unsigned short current_pos = fb_get_cursor();
+        for (int i = 0; i < strlen((char *)severity); i++)
+        {
+                fb_write_cell(current_pos, severity[i], FB_GREEN, FB_DARK_GREY);
+                current_pos++;
+                if (current_pos >= FB_MAX_POS)
+                {
+                        return 0;
+                }
+                fb_move_cursor(current_pos);
+
+        }
         for (int i = 0; i < len; i++)
         {
                 fb_write_cell(current_pos, buf[i], FB_GREEN, FB_DARK_GREY);

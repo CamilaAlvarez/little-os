@@ -1,5 +1,6 @@
 #include "serial_port.h"
 #include "io.h"
+#include "stdio.h"
 
 void serial_configure_baud_rate(unsigned short com, unsigned short divisor)
 {
@@ -34,7 +35,7 @@ void serial_write_char(unsigned short com, char c)
 	outb(SERIAL_DATA_PORT(com), c);
 }
 
-int serial_write(char *buf, unsigned int len)
+int serial_write(const char * const severity, char *buf, unsigned int len)
 {
 	/* Spin until the FIFO queues are empty */
 	/* We cannot write ANYTHING until the queues are empty
@@ -47,6 +48,10 @@ int serial_write(char *buf, unsigned int len)
 	serial_configure_buffers(SERIAL_COM1_BASE);
 	serial_configure_modem(SERIAL_COM1_BASE);
 	
+	for(int i = 0; i < strlen((char *)severity); i++)
+	{
+		serial_write_char(SERIAL_COM1_BASE, *(severity + i));
+	}
 	for(int i = 0; i < len; i++)
 	{
 		serial_write_char(SERIAL_COM1_BASE, *(buf + i));

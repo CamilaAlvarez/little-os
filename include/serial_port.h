@@ -78,6 +78,6 @@ void serial_write_char(unsigned short com, char c);
  * @param buf The buffer with the characters
  * @param len The number of characters to write
  */
-int serial_write(char *buf, unsigned int len);
+int serial_write(const char * const severity, char *buf, unsigned int len);
 
 #endif
