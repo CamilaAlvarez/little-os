@@ -36,15 +36,17 @@ void serial_write_char(unsigned short com, char c)
 
 int serial_write(char *buf, unsigned int len)
 {
+	/* Spin until the FIFO queues are empty */
+	/* We cannot write ANYTHING until the queues are empty
+	 * (not even configuration) */
+	while(!serial_is_transmit_fifo_empty(SERIAL_COM1_BASE));
+
 	/* Configure the serial port */
 	serial_configure_baud_rate(SERIAL_COM1_BASE, 2);
 	serial_configure_line(SERIAL_COM1_BASE);
 	serial_configure_buffers(SERIAL_COM1_BASE);
 	serial_configure_modem(SERIAL_COM1_BASE);
-
-	/* Spin until the FIFO queues are empty */
-	while(!serial_is_transmit_fifo_empty(SERIAL_COM1_BASE));
-
+	
 	for(int i = 0; i < len; i++)
 	{
 		serial_write_char(SERIAL_COM1_BASE, *(buf + i));

@@ -1,11 +1,10 @@
 #include "io.h"
 #include "framebuffer.h"
 #include "serial_port.h"
+#include "stdio.h"
 
 int main()
 {
 	char *str = "Hello World";
-	int len = 11;
-	fb_write(str, len);
-	serial_write(str, len);
+	printf(SERIAL_PORT, "%s %d %s%d", str, 2, "again", 4506);
 }
