@@ -10,6 +10,11 @@ outb:
 	mov dx, [esp + 4]
 	out dx, al
 	ret 
+
+; inb - return a byte from an I/O port
+; stack: [esp + 4] the I/O port address
+;        [esp    ] the return address 
+; eax:   reads the port and places data in eax
 inb:
 	mov dx, [esp + 4]
 	in al, dx
