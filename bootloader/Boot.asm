@@ -41,18 +41,29 @@ print:
 print_done:
 	ret 
 loader:
-	xor ax, ax
-	mov ds, ax
+.reset:
+	mov ah, 0 ; function 0
+	mov dl, 0 ; drive 0
+	int 0x13 ; reset drive interruption
+	jc .reset ; if it fails carry flag is set (we retry)
+
+	mov ax, 0x1000
 	mov es, ax
+	xor bx, bx ; sectors will be loaded to 0x1000:0
 
-	mov si, msg
-	call print
-
-	xor ax, ax
-	int 0x12 ; Request available RAM (may not be accurate)
-
-	cli
-	hlt
+	mov ah, 0x02 ; operation 0x02
+	mov al, 1 ; read 1 sector
+	mov ch, 1 ; from track 1
+	mov cl, 1 ; read second sector
+	mov dh, 0 ; head number
+	mov dl, 0 ; drive number
+	int 0x13
+	jmp 0x1000:0 ; far jmp to second stage bootloader 
 
 times 510 - ($ - $$) db 0
 dw 0xAA55
+
+org 0x1000
+
+cli 
+hlt
