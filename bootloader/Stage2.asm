@@ -11,6 +11,7 @@ jmp main
 
 %include "stdio.inc"
 %include "Gdt.inc"
+%include "A20.inc"
 
 LoadingMsg db "Preparing to load operating system ...", 0x0D, 0x0A, 0x00
 main:
@@ -31,22 +32,26 @@ main:
 	; Install GDT
 	call InstallGDT
 
+	; Enable A20 (before going to protected mode and enabling 32 bits)
+	call EnableA20
+
 	; go to protected mode
 	cli ; do not re-enable interrupts! It will cause triple fault
 	mov eax, cr0
 	or eax, 1 ; set bit 0 in cr0
 	mov cr0, eax
 	
-	jmp 08h:Stage3 ; far jump to set cs, and to start with 32 bits
+	jmp CODE_DESC:Stage3 ; far jump to set cs, and to start with 32 bits
 
 bits 32
 Stage3:
 	; set registers
-	mov ax, 0x10
+	mov ax, DATA_DESC
 	mov ds, ax
 	mov ss, ax
 	mov es, ax
 	mov esp, 90000h ; stack begins from 90000h
+
 
 STOP:
 	cli

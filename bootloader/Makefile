@@ -1,6 +1,6 @@
 DEST := build
 OBJECTS := $(DEST)/Boot.bin $(DEST)/KRNLDR.SYS
-INCLUDES := Gdt.inc stdio.inc
+INCLUDES := Gdt.inc stdio.inc A20.inc
 $(DEST)/%.bin : %.asm
 	mkdir -p $(DEST)
 	nasm -f bin $< -o $@
