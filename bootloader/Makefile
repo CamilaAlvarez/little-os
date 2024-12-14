@@ -1,10 +1,10 @@
 DEST := build
 OBJECTS := $(DEST)/Boot.bin $(DEST)/KRNLDR.SYS
-
+INCLUDES := Gdt.inc stdio.inc
 $(DEST)/%.bin : %.asm
 	mkdir -p $(DEST)
 	nasm -f bin $< -o $@
-$(DEST)/KRNLDR.SYS : Stage2.asm
+$(DEST)/KRNLDR.SYS : Stage2.asm $(INCLUDES)
 	nasm -f bin Stage2.asm -o $(DEST)/KRNLDR.SYS
 $(DEST)/floppy: $(OBJECTS) 
 	mkdir -p mount

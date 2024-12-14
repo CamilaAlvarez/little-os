@@ -3,32 +3,51 @@
 ; and load the kernel
 
 ; There's no 512 byte limit here!
-org 0x0
+org 0x500 ; are unused form 0x500 to 0x7bff
 
 bits 16 ; still 16 bits real mode
 
 jmp main
 
-Print:
-	lodsb ; load next of si to al
-	or al, al ; if we haven't reached the end
-	jz PrintDone
-	mov ah, 0eh ; print instruction
-	int 10h ; call interrupt (still in real mode, we have access to BIOS interrupts)
-	jmp Print
-PrintDone:
-	ret
+%include "stdio.inc"
+%include "Gdt.inc"
 
+LoadingMsg db "Preparing to load operating system ...", 0x0D, 0x0A, 0x00
 main:
+	;set segments and stack
 	cli ; causes processor to ignore maskable interrupts
-	push cs
-	pop ds ; now ds = cs
+	xor ax, ax
+	mov ds, ax
+	mov es, ax
+	mov ax, 0x9000 ; stack begins at 0x9000-0xffff
+	mov ss, ax
+	mov sp, 0xFFFF ; points to the end of the stack 
+	sti
 
-	mov si, Msg ; lodsb works with si, Msg is a variable
-	call Print
+	; Print loading message
+	mov si, LoadingMsg
+	call Puts16
 
+	; Install GDT
+	call InstallGDT
+
+	; go to protected mode
+	cli ; do not re-enable interrupts! It will cause triple fault
+	mov eax, cr0
+	or eax, 1 ; set bit 0 in cr0
+	mov cr0, eax
+	
+	jmp 08h:Stage3 ; far jump to set cs, and to start with 32 bits
+
+bits 32
+Stage3:
+	; set registers
+	mov ax, 0x10
+	mov ds, ax
+	mov ss, ax
+	mov es, ax
+	mov esp, 90000h ; stack begins from 90000h
+
+STOP:
 	cli
 	hlt
-
-Msg db "Preparing to load operating system ...",13,10,0 
-	
