@@ -39,5 +39,5 @@ toc:
 
 %define NULL_DESC 0
 %define CODE_DESC 0x8
-%define DATA_DESC 0x20
+%define DATA_DESC 0x10
 %endif ; __GDT_INC_67343546FDCC56AAB872_INCLUDED__

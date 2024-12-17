@@ -12,12 +12,18 @@ wait_input:
 wait_output:
 	in al, 0x64
 	test al, 1 ; output buffer status
-	jnz wait_output
+	jz wait_output
 	ret
 
 EnableA20:
 	cli ; disable interrupts
 	pusha ; store all registers
+
+
+	call    wait_input
+        mov     al,0xAD
+        out     0x64,al		; disable keyboard
+        call    wait_input
 
 	; send read output command port
 	mov al, 0xD0
@@ -45,7 +51,7 @@ EnableA20:
 
 	call wait_input
 	popa
-	stri
+	sti
 	ret
 
 %endif

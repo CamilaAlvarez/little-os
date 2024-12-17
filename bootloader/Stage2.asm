@@ -25,15 +25,15 @@ main:
 	mov sp, 0xFFFF ; points to the end of the stack 
 	sti
 
-	; Print loading message
-	mov si, LoadingMsg
-	call Puts16
-
 	; Install GDT
 	call InstallGDT
 
 	; Enable A20 (before going to protected mode and enabling 32 bits)
 	call EnableA20
+
+	; Print loading message
+	mov si, LoadingMsg
+	call Puts16
 
 	; go to protected mode
 	cli ; do not re-enable interrupts! It will cause triple fault
@@ -52,7 +52,12 @@ Stage3:
 	mov es, ax
 	mov esp, 90000h ; stack begins from 90000h
 
-
+	call ClrScr32
+	mov ebx, msg
+	call Puts32
 STOP:
 	cli
 	hlt
+
+msg db  0x0A, 0x0A, 0x0A, "               <[ OS Development Series Tutorial 10 ]>"
+    db  0x0A, 0x0A,             "           Basic 32 bit graphics demo in Assembly Language", 0
